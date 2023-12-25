@@ -1,0 +1,113 @@
+CREATE TABLE  course(
+  2  courseid INT,
+  3  coursename VARCHAR(50) NOT NULL,
+  4  attendence INT NOT NULL,
+  5  credits INT NOT NULL);
+ALTER TABLE course ADD CONSTRAINT course_pk PRIMARY KEY ( courseid );
+CREATE TABLE teacher(
+  2  ssn VARCHAR(15),
+  3  name VARCHAR(50) NOT NULL,
+  4  department VARCHAR(50) NOT NULL,
+  5  skills VARCHAR(100),
+  6  yearslysalary DECIMAL(10, 2) NOT NULL);
+ALTER TABLE teacher ADD CONSTRAINT teacher_pk PRIMARY KEY (ssn);
+create table rooms(
+  2  room_number INT,
+  3  room_type VARCHAR(20) NOT NULL,
+  4  capacity INT NOT NULL);
+ALTER TABLE rooms ADD CONSTRAINTS room_pk PRIMARY KEY(room_number);
+create table class_period(
+  2  period_number INT,
+  3  starting_time TIMESTAMP NOT NULL,
+  4  ending_time TIMESTAMP NOT NULL);
+
+ALTER TABLE class_period ADD CONSTRAINT class_period_pk PRIMARY KEY(period_number);
+create table class_period(
+  2  period_number INT,
+  3  starting_time TIMESTAMP NOT NULL,
+  4  ending_time TIMESTAMP NOT NULL);
+
+ALTER TABLE class_period ADD CONSTRAINT class_period_pk PRIMARY KEY(period_number);
+ALTER TABLE rooms ADD CONSTRAINTS room_pk PRIMARY KEY(room_number);
+
+create table schedule (
+  2  scheduleId INT,
+  3  courseid INT,
+  4  ssn VARCHAR(15),
+  5  room_number INT,
+  6  period_number INT);
+
+ALTER TABLE schedule ADD CONSTRAINTS courseid_fk foreign key(courseid) REFERENCES course(courseid);
+
+
+ALTER TABLE schedule ADD CONSTRAINTS ssn_fk foreign key(ssn) references teacher(ssn);
+
+
+ALTER TABLE schedule ADD CONSTRAINTS room_number_fk foreign key(room_number) references rooms(room_number);
+
+create table class_period(
+  2  period_number INT,
+  3  starting_time TIMESTAMP NOT NULL,
+  4  ending_time TIMESTAMP NOT NULL);
+
+ALTER TABLE class_period ADD CONSTRAINT class_period_pk PRIMARY KEY(period_number);
+
+ALTER TABLE rooms ADD CONSTRAINTS room_pk PRIMARY KEY(room_number);
+
+ ALTER TABLE schedule ADD CONSTRAINTS period_number_fk foreign key(period_number)  references class_period(period_number);
+
+-- Insert data into the 'course' table
+INSERT INTO course (courseid, coursename, attendence, credits)
+VALUES
+  (1, 'Mathematics', 30, 4),
+  (2, 'History', 25, 3),
+  (3, 'Computer Science', 35, 5),
+  (4, 'Physics', 28, 4),
+  (5, 'English Literature', 32, 3);
+
+-- Insert data into the 'teacher' table
+INSERT INTO teacher (ssn, name, department, skills, yearslysalary)
+VALUES
+  ('123-45-6789', 'John Doe', 'Mathematics', 'Algebra', 75000.00),
+  ('987-65-4321', 'Jane Smith', 'History', 'World History', 80000.00),
+  ('111-22-3333', 'Bob Johnson', 'Computer Science', 'Programming', 90000.00),
+  ('444-55-6666', 'Alice Brown', 'Physics', 'Quantum Mechanics', 82000.00),
+  ('777-88-9999', 'Eva White', 'English', 'Literary Analysis', 78000.00);
+
+-- Insert data into the 'rooms' table
+INSERT INTO rooms (room_number, room_type, capacity)
+VALUES
+  (101, 'Lecture Hall', 100),
+  (201, 'Lab', 30),
+  (301, 'Classroom', 50),
+  (102, 'Conference Room', 20),
+  (202, 'Small Lab', 15);
+
+INSERT INTO class_period (period_number, starting_time,ending_time)
+   VALUES
+  (1,TO_TIMESTAMP( '2023-12-25 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP ('2023-12-25 09:30:00', 'YYYY-MM-DD HH24:MI:SS'));
+  (1,TO_TIMESTAMP( '2023-12-25 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP ('2023-12-25 09:30:00', 'YYYY-MM-DD HH24:MI:SS'));
+INSERT INTO class_period (period_number, starting_time,ending_time)
+       VALUES
+  3    (3,TO_TIMESTAMP( '2023-12-25 13:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP ('2023-12-25 14:30:00', 'YYYY-MM-DD HH24:MI:SS'));
+
+  
+
+INSERT INTO schedule (scheduleId, courseid, ssn, room_number, period_number)
+VALUES
+  (1, 1, '123-45-6789', 101, 1),
+  (2, 2, '987-65-4321', 201, 2),
+  (3, 3, '111-22-3333', 301, 3),
+  (4, 4, '444-55-6666', 102, 4),
+  (5, 5, '777-88-9999', 202, 5);
+
+INSERT INTO class_period (period_number, starting_time,ending_time)
+   VALUES
+  (1,TO_TIMESTAMP( '2023-12-25 08:00:00', 'YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP ('2023-12-25 09:30:00', 'YYYY-MM-DD HH24:MI:SS'));
+SELECT coursename
+  2  FROM course
+  3  INNER JOIN schedule
+  4  ON course.courseid = schedule.courseid
+  5  INNER JOIN class_period
+  6  ON schedule.period_number = class_period.period_number
+  7  WHERE starting_time = '25-DEC-23 08.00.00.000000 AM';
