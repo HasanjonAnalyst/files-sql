@@ -111,3 +111,5 @@ SELECT coursename
   5  INNER JOIN class_period
   6  ON schedule.period_number = class_period.period_number
   7  WHERE starting_time = '25-DEC-23 08.00.00.000000 AM';
+
+print("great!")
